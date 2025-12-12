@@ -9,7 +9,7 @@ class ActivityLog extends Model
     use HasFactory;
     protected $fillable = ['action', 'description', 'transaction_id'];
 
-    // Relasi ke Transaksi (agar bisa ambil detail barang saat di view)
+    // relasi ke Transaksi (agar bisa ambil detail barang saat di view)
     public function transaction()
     {
         return $this->belongsTo(Transaction::class);

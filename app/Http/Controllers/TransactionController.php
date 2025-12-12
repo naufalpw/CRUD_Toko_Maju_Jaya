@@ -70,7 +70,7 @@ class TransactionController extends Controller
                 }
             }
 
-            // LOG: Catat bahwa transaksi terjadi
+            // LOG: catat bahwa transaksi terjadi
             // simpan transaction_id agar nanti bisa ditampilkan detail barangnya di view
             ActivityLog::create([
                 'action' => 'Transaksi Penjualan',
@@ -83,10 +83,9 @@ class TransactionController extends Controller
         return redirect()->route('transactions.history')->with('success', 'Transaksi berhasil!');
     }
 
-    // halaman Riwayat
+    // halaman riwayat
     public function history() {
-        // 3. UBAH LOGIKA: Ambil data dari ActivityLog, bukan Transaction langsung
-        // Ini agar log transaksi bercampur dengan log edit/tambah produk dalam satu timeline
+        // ambil data dari ActivityLog, bukan Transaction langsung agar bisa tampilkan detail barangnya juga
         $logs = ActivityLog::with('transaction.details.product')->latest()->get();
         
         return view('transactions.history', compact('logs'));

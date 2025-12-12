@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
-use App\Models\ActivityLog; // JANGAN LUPA: Tambahkan Import ini
+use App\Models\ActivityLog;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -31,10 +31,10 @@ class ProductController extends Controller
             'stock' => 'required|integer',
         ]);
 
-        // Simpan produk ke variabel $product agar kita bisa ambil namanya untuk Log
+        // simpan produk ke variabel $product agar kita bisa ambil namanya untuk Log
         $product = Product::create($request->all());
 
-        // --- TAMBAHAN LOG: Catat aktivitas tambah produk ---
+        // --- TAMBAHAN LOG: catat aktivitas tambah produk ---
         ActivityLog::create([
             'action' => 'Tambah Produk',
             'description' => "Menambahkan produk baru: {$product->name}, Stok awal: {$product->stock}"
@@ -61,7 +61,7 @@ class ProductController extends Controller
 
         $product->update($request->all());
 
-        // --- TAMBAHAN LOG: Catat aktivitas edit produk ---
+        // --- TAMBAHAN LOG: catat aktivitas edit produk ---
         ActivityLog::create([
             'action' => 'Edit Produk',
             'description' => "Mengupdate data produk: {$product->name}, Harga: {$product->price}, Stok: {$product->stock}"
@@ -74,12 +74,12 @@ class ProductController extends Controller
     // menghapus produk
     public function destroy(Product $product)
     {
-        // Simpan nama produk dulu sebelum dihapus agar bisa masuk log
+        // simpan nama produk dulu sebelum dihapus agar bisa masuk log
         $productName = $product->name; 
         
         $product->delete();
 
-        // --- TAMBAHAN LOG: Catat aktivitas hapus produk ---
+        // --- TAMBAHAN LOG: catat aktivitas hapus produk ---
         ActivityLog::create([
             'action' => 'Hapus Produk',
             'description' => "Menghapus produk: {$productName}"
