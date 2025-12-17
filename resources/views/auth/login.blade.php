@@ -1,33 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row justify-content-center mt-5">
-    <div class="col-md-4">
-        <div class="card shadow">
-            <div class="card-header bg-primary text-white text-center">
-                <h4 class="mb-0">Login Toko Maju Jaya</h4>
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-5">
+        <div class="text-center mb-4">
+            <div class="bg-success text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3 shadow" style="width: 80px; height: 80px;">
+                <i class="bi bi-shop fs-1"></i>
             </div>
-            <div class="card-body">
+            <h3 class="fw-bold text-success">Toko Maju Jaya</h3>
+            <p class="text-muted">Sistem Manajemen Stok & Kasir Sembako</p>
+        </div>
+
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-4 p-md-5">
                 @if($errors->any())
-                    <div class="alert alert-danger">
+                    <div class="alert alert-danger d-flex align-items-center">
+                        <i class="bi bi-exclamation-triangle-fill me-2"></i>
                         {{ $errors->first() }}
                     </div>
                 @endif
 
                 <form action="{{ route('login') }}" method="POST">
                     @csrf
-                    <div class="mb-3">
-                        <label>Email Address</label>
-                        <input type="email" name="email" class="form-control" value="{{ old('email') }}" required autofocus>
+                    <div class="form-floating mb-3">
+                        <input type="email" name="email" class="form-control" id="emailInput" placeholder="name@example.com" value="{{ old('email') }}" required autofocus>
+                        <label for="emailInput">Alamat Email</label>
                     </div>
-                    <div class="mb-3">
-                        <label>Password</label>
-                        <input type="password" name="password" class="form-control" required>
+                    <div class="form-floating mb-4">
+                        <input type="password" name="password" class="form-control" id="passwordInput" placeholder="Password" required>
+                        <label for="passwordInput">Password</label>
                     </div>
                     <div class="d-grid">
-                        <button type="submit" class="btn btn-primary">Masuk</button>
+                        <button type="submit" class="btn btn-success btn-lg py-3 fw-bold shadow-sm">
+                            MASUK SISTEM <i class="bi bi-arrow-right-circle ms-2"></i>
+                        </button>
                     </div>
                 </form>
+            </div>
+            <div class="card-footer bg-light text-center py-3">
+                <small class="text-muted">&copy; {{ date('Y') }} Toko Maju Jaya. All rights reserved.</small>
             </div>
         </div>
     </div>

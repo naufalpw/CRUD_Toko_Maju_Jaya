@@ -9,6 +9,6 @@ class TransactionDetail extends Model
 protected $fillable = ['transaction_id', 'product_id', 'qty', 'subtotal'];
 
 public function product() {
-    return $this->belongsTo(Product::class);
+    return $this->belongsTo(Product::class)->withTrashed();
 }
 }
