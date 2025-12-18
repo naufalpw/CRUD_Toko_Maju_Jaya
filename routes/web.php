@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ReportController;
 
 // Middleware 'guest' mencegah user yang sudah login masuk ke halaman login lagi
 Route::middleware('guest')->group(function() {
@@ -30,4 +31,6 @@ Route::middleware('auth')->group(function() {
     Route::post('/transaction/checkout', [TransactionController::class, 'checkout'])->name('transactions.checkout');
     Route::get('/history', [TransactionController::class, 'history'])->name('transactions.history');
     Route::get('/transactions/print/{id}', [App\Http\Controllers\TransactionController::class, 'print'])->name('transactions.print');
+    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::post('/reports/expense', [ReportController::class, 'storeExpense'])->name('reports.store_expense');
 });
