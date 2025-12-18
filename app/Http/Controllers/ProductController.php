@@ -8,84 +8,95 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    // menampilkan daftar produk
-    public function index()
+    // Daftar kategori yang tersedia (Bisa juga dibuat tabel database terpisah jika ingin dinamis)
+    private $categories = ['Makanan', 'Minuman', 'Elektronik', 'Pakaian', 'Alat Tulis', 'Sembako', 'Lainnya'];
+
+    // Menampilkan daftar produk dengan FITUR SEARCH & FILTER
+    public function index(Request $request)
     {
-        $products = Product::all();
-        return view('products.index', compact('products'));
+        // Mulai Query
+        $query = Product::query();
+
+        // 1. Logika Search (Berdasarkan Nama)
+        if ($request->has('search') && $request->search != null) {
+            $query->where('name', 'like', '%' . $request->search . '%');
+        }
+
+        // 2. Logika Filter Kategori
+        if ($request->has('category') && $request->category != null) {
+            $query->where('category', $request->category);
+        }
+
+        // Ambil data (menggunakan latest agar yang baru tampil diatas)
+        $products = $query->latest()->get();
+        
+        // Kirim juga variabel $categories untuk dropdown filter di view
+        $categories = $this->categories;
+
+        return view('products.index', compact('products', 'categories'));
     }
 
-    // menampilkan form tambah produk
     public function create()
     {
-        return view('products.create');
+        // Kirim data kategori ke view
+        $categories = $this->categories;
+        return view('products.create', compact('categories'));
     }
 
-    // menyimpan produk baru ke database
     public function store(Request $request)
     {
-        // validasi
         $request->validate([
             'name' => 'required',
+            'category' => 'required', // Validasi kategori
             'price' => 'required|numeric',
             'stock' => 'required|integer',
         ]);
 
-        // simpan produk ke variabel $product agar kita bisa ambil namanya untuk Log
         $product = Product::create($request->all());
 
-        // --- TAMBAHAN LOG: catat aktivitas tambah produk ---
         ActivityLog::create([
             'action' => 'Tambah Produk',
-            'description' => "Menambahkan produk baru: {$product->name}, Stok awal: {$product->stock}"
+            'description' => "Menambahkan produk: {$product->name} ({$product->category})"
         ]);
 
-        return redirect()->route('products.index')
-                         ->with('success', 'Produk berhasil ditambahkan');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil ditambahkan');
     }
 
-    // menampilkan form edit
     public function edit(Product $product)
     {
-        return view('products.edit', compact('product'));
+        $categories = $this->categories;
+        return view('products.edit', compact('product', 'categories'));
     }
 
-    // update data produk di database
     public function update(Request $request, Product $product)
     {
         $request->validate([
             'name' => 'required',
+            'category' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required|integer',
         ]);
 
         $product->update($request->all());
 
-        // --- TAMBAHAN LOG: catat aktivitas edit produk ---
         ActivityLog::create([
             'action' => 'Edit Produk',
-            'description' => "Mengupdate data produk: {$product->name}, Harga: {$product->price}, Stok: {$product->stock}"
+            'description' => "Mengupdate produk: {$product->name}"
         ]);
 
-        return redirect()->route('products.index')
-                         ->with('success', 'Produk berhasil diupdate');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil diupdate');
     }
 
-    // menghapus produk
     public function destroy(Product $product)
     {
-        // simpan nama produk dulu sebelum dihapus agar bisa masuk log
         $productName = $product->name; 
-        
         $product->delete();
 
-        // --- TAMBAHAN LOG: catat aktivitas hapus produk ---
         ActivityLog::create([
             'action' => 'Hapus Produk',
             'description' => "Menghapus produk: {$productName}"
         ]);
 
-        return redirect()->route('products.index')
-                         ->with('success', 'Produk berhasil dihapus');
+        return redirect()->route('products.index')->with('success', 'Produk berhasil dihapus');
     }
-}
+}   

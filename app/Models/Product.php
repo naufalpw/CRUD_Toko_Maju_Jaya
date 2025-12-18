@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
 use SoftDeletes;
-protected $fillable = ['name', 'price', 'stock', 'description'];
+protected $fillable = ['name', 'category', 'price', 'stock', 'description'  ];
 
 public function details() {
     return $this->hasMany(TransactionDetail::class);

@@ -29,4 +29,5 @@ Route::middleware('auth')->group(function() {
     Route::post('/transaction/add', [TransactionController::class, 'addToCart'])->name('transactions.add');
     Route::post('/transaction/checkout', [TransactionController::class, 'checkout'])->name('transactions.checkout');
     Route::get('/history', [TransactionController::class, 'history'])->name('transactions.history');
+    Route::get('/transactions/print/{id}', [App\Http\Controllers\TransactionController::class, 'print'])->name('transactions.print');
 });

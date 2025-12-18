@@ -1,6 +1,8 @@
 @extends('layouts.app')
+
 @section('content')
 <div class="row g-4">
+    {{-- BAGIAN KIRI: INPUT BARANG --}}
     <div class="col-md-7">
         <div class="card shadow-sm border-0 h-100">
             <div class="card-header bg-success text-white py-3">
@@ -9,8 +11,10 @@
             <div class="card-body">
                 <form action="{{ route('transactions.add') }}" method="POST">
                     @csrf
-                    <label class="form-label fw-bold text-secondary">Pilih Produk</label>
-                    <div class="input-group mb-3">
+                    
+                    {{-- 1. Pilih Produk --}}
+                    <div class="mb-3">
+                        <label class="form-label fw-bold text-secondary">Pilih Produk</label>
                         <select name="product_id" class="form-select form-select-lg" required>
                             <option value="">-- Cari Nama Barang --</option>
                             @foreach($products as $p)
@@ -20,10 +24,22 @@
                                 </option>
                             @endforeach
                         </select>
-                        <button type="submit" class="btn btn-success px-4">
-                            <i class="bi bi-cart-plus me-1"></i> Tambah
-                        </button>
                     </div>
+
+                    {{-- 2. Input Quantity & Tombol Submit --}}
+                    <div class="row g-2 align-items-end mb-3">
+                        <div class="col-3 col-md-3">
+                            <label class="form-label fw-bold text-secondary">Qty</label>
+                            {{-- Input QTY ditambahkan disini --}}
+                            <input type="number" name="qty" class="form-control form-control-lg text-center" value="1" min="1" required>
+                        </div>
+                        <div class="col-9 col-md-9">
+                            <button type="submit" class="btn btn-success btn-lg w-100">
+                                <i class="bi bi-cart-plus me-1"></i> Tambah Ke Keranjang
+                            </button>
+                        </div>
+                    </div>
+
                     <div class="alert alert-light border border-success text-success small">
                         <i class="bi bi-info-circle me-1"></i> Pastikan stok mencukupi sebelum menambahkan barang.
                     </div>
@@ -32,8 +48,10 @@
         </div>
     </div>
 
+    {{-- BAGIAN KANAN: STRUK BELANJA (Tidak banyak berubah, hanya layout tampilan) --}}
     <div class="col-md-5">
-        <div class="card shadow border-0 h-100" style="background-color: #fffdf8;"> <div class="card-header bg-dark text-white text-center py-3">
+        <div class="card shadow border-0 h-100" style="background-color: #fffdf8;"> 
+            <div class="card-header bg-dark text-white text-center py-3">
                 <h5 class="mb-0 fw-bold"><i class="bi bi-receipt me-2"></i>STRUK BELANJA</h5>
             </div>
             <div class="card-body d-flex flex-column">

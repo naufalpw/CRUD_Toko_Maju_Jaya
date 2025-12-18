@@ -25,6 +25,7 @@
         <div class="card-body p-4">
             <div class="tab-content" id="myTabContent">
                 
+                {{-- TAB RIWAYAT TRANSAKSI --}}
                 <div class="tab-pane fade show active" id="transaksi" role="tabpanel">
                     @php $hasTransaction = false; @endphp
                     
@@ -35,12 +36,25 @@
                             <div class="col-md-12 mb-4">
                                 <div class="card shadow-sm h-100 border-start border-5 border-success">
                                     <div class="card-header bg-light d-flex justify-content-between align-items-center">
+                                        {{-- Bagian Kiri: Invoice --}}
                                         <div>
                                             <span class="badge bg-success me-2">LUNAS</span>
                                             <span class="fw-bold text-dark">{{ $log->transaction->invoice_code ?? 'INV' }}</span>
                                         </div>
-                                        <small class="text-muted"><i class="bi bi-calendar3 me-1"></i> {{ $log->created_at->format('d M Y, H:i:s') }} WIB</small>
+
+                                        {{-- Bagian Kanan: Tanggal & Tombol Print --}}
+                                        <div class="d-flex align-items-center">
+                                            <small class="text-muted me-3 d-none d-md-block">
+                                                <i class="bi bi-calendar3 me-1"></i> {{ $log->created_at->format('d M Y, H:i:s') }} WIB
+                                            </small>
+                                            
+                                            {{-- TOMBOL PRINT DITAMBAHKAN DI SINI --}}
+                                            <a href="{{ route('transactions.print', $log->transaction->id) }}" target="_blank" class="btn btn-sm btn-outline-dark shadow-sm">
+                                                <i class="bi bi-printer-fill me-1"></i> Cetak Struk
+                                            </a>
+                                        </div>
                                     </div>
+
                                     <div class="card-body">
                                         <table class="table table-sm table-borderless mb-0">
                                             <thead class="text-muted border-bottom">
@@ -49,7 +63,6 @@
                                             <tbody>
                                                 @foreach($log->transaction->details as $detail)
                                                 <tr>
-                                                    {{-- MODIFIKASI: Menangani Produk yang Terhapus --}}
                                                     <td>
                                                         @if($detail->product)
                                                             {{ $detail->product->name }}
@@ -87,6 +100,7 @@
                     @endif
                 </div>
 
+                {{-- TAB AKTIVITAS --}}
                 <div class="tab-pane fade" id="aktivitas" role="tabpanel">
                     <div class="list-group list-group-flush">
                         @php $hasActivity = false; @endphp

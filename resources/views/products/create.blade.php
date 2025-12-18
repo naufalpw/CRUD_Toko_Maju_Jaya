@@ -11,11 +11,27 @@
                 <form action="{{ route('products.store') }}" method="POST">
                     @csrf
                     
-                    <div class="mb-4">
-                        <label class="form-label fw-bold text-secondary">Nama Produk</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="bi bi-tag"></i></span>
-                            <input type="text" name="name" class="form-control" placeholder="Contoh: Beras Pandan Wangi 5kg" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold text-secondary">Nama Produk</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-tag"></i></span>
+                                <input type="text" name="name" class="form-control" placeholder="Contoh: Beras..." required>
+                            </div>
+                        </div>
+                        
+                        {{-- INPUT KATEGORI --}}
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold text-secondary">Kategori</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-bookmarks"></i></span>
+                                <select name="category" class="form-select" required>
+                                    <option value="">-- Pilih Kategori --</option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat }}">{{ $cat }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -39,7 +55,7 @@
 
                     <div class="mb-4">
                         <label class="form-label fw-bold text-secondary">Deskripsi (Opsional)</label>
-                        <textarea name="description" class="form-control" rows="3" placeholder="Keterangan tambahan produk..."></textarea>
+                        <textarea name="description" class="form-control" rows="3" placeholder="Keterangan tambahan..."></textarea>
                     </div>
 
                     <div class="d-flex justify-content-between pt-3 border-top">
@@ -48,7 +64,7 @@
                         </a>
                         <button type="submit" class="btn btn-success px-5 fw-bold">
                             <i class="bi bi-save me-1"></i> Simpan Produk
-                        </button>
+                        </button>   
                     </div>
                 </form>
             </div>

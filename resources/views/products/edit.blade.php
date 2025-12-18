@@ -12,11 +12,29 @@
                     @csrf
                     @method('PUT')
 
-                    <div class="mb-4">
-                        <label class="form-label fw-bold text-secondary">Nama Produk</label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-light"><i class="bi bi-tag"></i></span>
-                            <input type="text" name="name" class="form-control" value="{{ $product->name }}" required>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold text-secondary">Nama Produk</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-tag"></i></span>
+                                <input type="text" name="name" class="form-control" value="{{ $product->name }}" required>
+                            </div>
+                        </div>
+
+                        {{-- EDIT KATEGORI --}}
+                        <div class="col-md-6 mb-4">
+                            <label class="form-label fw-bold text-secondary">Kategori</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-light"><i class="bi bi-bookmarks"></i></span>
+                                <select name="category" class="form-select" required>
+                                    <option value="">-- Pilih Kategori --</option>
+                                    @foreach($categories as $cat)
+                                        <option value="{{ $cat }}" {{ $product->category == $cat ? 'selected' : '' }}>
+                                            {{ $cat }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
 
@@ -56,4 +74,4 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection 
