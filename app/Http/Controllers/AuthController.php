@@ -10,7 +10,13 @@ class AuthController extends Controller
     // 1. Tampilkan Form Login
     public function showLoginForm()
     {
-        return view('auth.login');
+        // PERBAIKAN: Menggunakan response() dengan header anti-cache
+        // Ini mencegah browser menyimpan halaman login lama yang token-nya sudah kadaluarsa
+        return response()
+            ->view('auth.login')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', 'Sat, 01 Jan 2000 00:00:00 GMT');
     }
 
     // 2. Proses Login
@@ -23,7 +29,8 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials)) {
             $request->session()->regenerate();
-            return redirect()->intended('products'); // Redirect ke halaman produk setelah login
+            
+            return redirect()->intended(route('dashboard.index')); 
         }
 
         return back()->withErrors([
@@ -35,8 +42,14 @@ class AuthController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        
+        // Menghapus session lama
         $request->session()->invalidate();
+        
+        // Membuat token baru (Penting untuk mencegah 419 di login berikutnya)
         $request->session()->regenerateToken();
-        return redirect('/login');
+        
+        // Redirect ke route login
+        return redirect()->route('login');
     }
 }

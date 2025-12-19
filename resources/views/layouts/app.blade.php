@@ -76,6 +76,14 @@
         @auth
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav ms-auto align-items-center">
+
+                {{-- MENU DASHBOARD (BARU DITAMBAHKAN) --}}
+                <li class="nav-item">
+                    {{-- Perhatikan perubahan di bawah ini: 'dashboard' menjadi 'dashboard.index' --}}
+                    <a class="nav-link {{ request()->routeIs('dashboard.index') ? 'active fw-bold' : '' }}" href="{{ route('dashboard.index') }}">
+                        <i class="bi bi-speedometer2 me-1"></i> Dashboard
+                    </a>
+                </li>
                 
                 {{-- MENU PRODUK --}}
                 <li class="nav-item">
@@ -88,20 +96,6 @@
                 <li class="nav-item">
                     <a class="nav-link {{ request()->routeIs('transactions.index') ? 'active fw-bold' : '' }}" href="{{ route('transactions.index') }}">
                         <i class="bi bi-calculator me-1"></i> Kasir
-                    </a>
-                </li>
-
-                {{-- MENU RIWAYAT --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('transactions.history') ? 'active fw-bold' : '' }}" href="{{ route('transactions.history') }}">
-                        <i class="bi bi-clock-history me-1"></i> Riwayat
-                    </a>
-                </li>
-
-                {{-- MENU LAPORAN (BARU DITAMBAHKAN) --}}
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('reports.*') ? 'active fw-bold' : '' }}" href="{{ route('reports.index') }}">
-                        <i class="bi bi-bar-chart-line me-1"></i> Laporan
                     </a>
                 </li>
                 

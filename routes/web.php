@@ -4,33 +4,43 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\TransactionController;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ReportController;
+use App\Http\Controllers\DashboardController; 
 
-// Middleware 'guest' mencegah user yang sudah login masuk ke halaman login lagi
+// --- MIDDLEWARE GUEST (Untuk yang belum login) ---
 Route::middleware('guest')->group(function() {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/login', [AuthController::class, 'login']);
 });
 
-
-// Middleware 'auth' akan menendang user yang belum login kembali ke halaman login
+// --- MIDDLEWARE AUTH (Untuk yang sudah login) ---
 Route::middleware('auth')->group(function() {
     
-    // Route untuk Logout
+    // 1. Logout
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
-    // Redirect halaman utama ke dashboard/produk
+    // 2. Redirect Halaman Utama (root) ke Dashboard
     Route::get('/', function () {
-        return redirect()->route('products.index');
+        return redirect()->route('dashboard.index');
     });
 
-    // Semua fitur toko ada di sini
+    // 3. Route Dashboard Utama
+    // HANYA GUNAKAN SATU NAMA. Kita pakai 'dashboard.index' agar sesuai dengan controller.
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+
+    // 4. Route Simpan Pengeluaran
+    // Nama route tetap 'reports.store_expense' sesuai permintaan agar form blade tidak perlu diubah
+    Route::post('/dashboard/expense', [DashboardController::class, 'storeExpense'])
+        ->name('reports.store_expense');
+
+    // 5. Fitur Produk (CRUD Otomatis: index, create, store, edit, update, destroy)
     Route::resource('products', ProductController::class);
-    Route::get('/transaction', [TransactionController::class, 'index'])->name('transactions.index');
-    Route::post('/transaction/add', [TransactionController::class, 'addToCart'])->name('transactions.add');
-    Route::post('/transaction/checkout', [TransactionController::class, 'checkout'])->name('transactions.checkout');
-    Route::get('/history', [TransactionController::class, 'history'])->name('transactions.history');
-    Route::get('/transactions/print/{id}', [App\Http\Controllers\TransactionController::class, 'print'])->name('transactions.print');
-    Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
-    Route::post('/reports/expense', [ReportController::class, 'storeExpense'])->name('reports.store_expense');
+
+    // 6. Fitur Kasir / Transaksi
+    Route::controller(TransactionController::class)->group(function() {
+        Route::get('/transaction', 'index')->name('transactions.index');
+        Route::post('/transaction/add', 'addToCart')->name('transactions.add');
+        Route::post('/transaction/checkout', 'checkout')->name('transactions.checkout');
+        Route::get('/transactions/print/{id}', 'print')->name('transactions.print');
+    });
+
 });
